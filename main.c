@@ -2,12 +2,25 @@
 
 #include <stdio.h>
 
+#define NB_REP 1000
+
 int main(int argc, char const *argv[])
 {
 	transition_m* mat = create_transition_m();
-	for(int i = 500000; i < 500010; i++) {
-		printf("row : %d col: %d val: %f \n", mat->row[i], mat->col[i], mat->val[i]);
+	vector* vect = create_vector();
+	vector* res = create_vector();
+
+	vect->val[0] = 1.0;
+
+	for(int rep = 0; rep < NB_REP; rep++) {
+		product_matrix_vector(mat, vect, res);
+		copy_result(vect, res);
 	}
+	
+	write_result(vect);
+
 	free_transition_m(mat);
+	free_vector(vect);
+	free_vector(res);
 	return 0;
 }

@@ -43,6 +43,11 @@ transition_m* create_transition_m() {
 			cpt++;
 		}
 	}
+	
+	for(int i = 1; i <= nb_link; i++) {
+		mat->val[cpt - i] = 1.0/nb_link;
+	}
+
 	fclose(fp);
 	if (line) {
 		free(line);
@@ -56,4 +61,43 @@ void free_transition_m(transition_m* mat) {
 	free(mat->col);
 	free(mat->val);
 	free(mat);
+}
+
+vector* create_vector() {
+	vector* vect = malloc(sizeof(vector));
+	vect->nb_val = NB_NODE;
+	vect->val = malloc(NB_NODE * sizeof(float));
+
+	for(int i = 0; i < 	NB_NODE ; i++) {
+		vect->val[i] = 0.0;
+	}
+
+	return vect;
+}
+
+void free_vector(vector* vect) {
+	free(vect->val);
+	free(vect);
+}
+
+void product_matrix_vector(transition_m* mat, vector* vect, vector* res) {
+	for(int i = 0; i < mat->nb_val; i++) {
+		res->val[mat->row[i]] += mat->val[i] * vect->val[mat->col[i]];
+	}
+}
+
+void copy_result(vector* vect, vector* res) {
+	for(int i = 0; i < vect->nb_val; i++) {
+		vect->val[i] = res->val[i];
+		res->val[i] = 0.0;
+	}
+}
+
+void write_result(vector* vect) {
+	FILE* fp;
+	fp = fopen(RES_PATH, "w");
+	for(int i = 0; i < vect->nb_val; i++) {
+		fprintf(fp, "%f\n", vect->val[i]);
+	}
+	fclose(fp);
 }
