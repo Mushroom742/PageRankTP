@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-#define NB_REP 1000
+#define NB_REP 100
 
 int main(int argc, char const *argv[])
 {
@@ -14,6 +14,7 @@ int main(int argc, char const *argv[])
 
 	for(int rep = 0; rep < NB_REP; rep++) {
 		product_matrix_vector(mat, vect, res);
+		improved_vector(vect, res);
 		copy_result(vect, res);
 	}
 	

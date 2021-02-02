@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <float.h>
 
 transition_m* create_transition_m() {
 	transition_m* mat = malloc(sizeof(transition_m));
@@ -86,6 +87,19 @@ void product_matrix_vector(transition_m* mat, vector* vect, vector* res) {
 	}
 }
 
+void improved_vector(vector* vect, vector* res) {
+	float sum = 0.0;
+	for(int i = 0; i < vect->nb_val; i++) {
+		sum += vect->val[i];
+	}
+
+	float coef = ((1.0 - ALPHA) / vect->nb_val) * sum;
+
+	for(int i = 0; i < res->nb_val ; i++) {
+		res->val[i] = res->val[i] * ALPHA + coef;
+	}
+}
+
 void copy_result(vector* vect, vector* res) {
 	for(int i = 0; i < vect->nb_val; i++) {
 		vect->val[i] = res->val[i];
@@ -97,7 +111,7 @@ void write_result(vector* vect) {
 	FILE* fp;
 	fp = fopen(RES_PATH, "w");
 	for(int i = 0; i < vect->nb_val; i++) {
-		fprintf(fp, "%f\n", vect->val[i]);
+		fprintf(fp, "%.*f\n", DBL_DIG - 1, vect->val[i]);
 	}
 	fclose(fp);
 }
