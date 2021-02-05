@@ -1,11 +1,11 @@
 CC=gcc
-CFLAGS=-Wall
+CFLAGS=-Wall -lm
 EXEC=main
 
 all: $(EXEC)
 
 main: main.o pageRank.o
-	$(CC) -o main main.o pageRank.o
+	$(CC) -o main main.o pageRank.o $(CFLAGS)
 
 main.o: main.c pageRank.h
 	$(CC) -o main.o -c main.c $(CFLAGS)
